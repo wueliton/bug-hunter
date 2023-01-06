@@ -17,7 +17,7 @@ export class GameAssets {
     this.progress = (100 / imageListLength) * this.#itensLoaded;
   }
 
-  async loadAssets(imageList: ImageList) {
+  async loadAssets(imageList: ImageList, onLoad?: () => void) {
     Object.entries(imageList).forEach(([key, src]) => {
       new Promise<HTMLImageElement>((resolve, reject) => {
         const image = new Image();
@@ -28,6 +28,8 @@ export class GameAssets {
         this.#itensLoaded++;
         this.images[key] = image;
         this.updateProgress(Object.keys(imageList).length);
+
+        if (this.progress === 100) onLoad?.();
         return image;
       });
     });

@@ -10,16 +10,17 @@ export class LoadScreen implements SpriteModel {
 
   private loadAssets(onLoad: () => void) {
     const assets = new GameAssets();
-    assets
-      .loadAssets({
+    assets.loadAssets(
+      {
         empty: './src/assets/images/loadbar-empty.png',
         full: './src/assets/images/loadbar-full.png',
-      })
-      .then(() => {
+      },
+      () => {
         this.loadBarImages = assets.images as typeof this.loadBarImages;
 
         onLoad();
-      });
+      }
+    );
   }
 
   constructor(

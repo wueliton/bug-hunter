@@ -4,9 +4,8 @@ export const assetsMap = {
   charUp: './src/assets/images/charUp.png',
   charLeft: './src/assets/images/charLeft.png',
   charRight: './src/assets/images/charRight.png',
-  loadbarEmpty: './src/assets/images/loadbar-empty.png',
-  loadbarFull: './src/assets/images/loadbar-full.png',
   mainMap: './src/assets/images/map.png',
   mapForeground: './src/assets/images/map_foreground.png',
-  skull: './src/assets/images/bug.png',
+  skull: './src/assets/images/bugScreen.png',
+  mobScreenDamage: './src/assets/images/bugScreenDamage.png',
 };

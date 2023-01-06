@@ -6,9 +6,26 @@ export class Mob extends Player implements SpriteModel {
   #movement: 'left' | 'right' | 'up' | 'down' = 'left';
   #movementCount = 0;
   maxMovement = 3;
+  attackRange = 140;
+  damage = 10;
 
-  constructor(props: PlayerProps, private collisions: Collisions) {
+  constructor(
+    props: PlayerProps,
+    private collisions: Collisions,
+    private char: Player
+  ) {
     super(props);
+  }
+
+  verifyAttack() {
+    if (
+      this.position.x <= this.char.position.x + this.attackRange &&
+      this.position.x >= this.char.position.x - this.attackRange &&
+      this.position.y <= this.char.position.y + this.attackRange &&
+      this.position.y >= this.char.position.y - this.attackRange
+    )
+      this.image = this.sprites.mobScreenDamage;
+    else this.image = this.sprites.skull;
   }
 
   draw(ctx: CanvasRenderingContext2D) {
@@ -71,6 +88,8 @@ export class Mob extends Player implements SpriteModel {
       )
     )
       this.position[axis] = this.position[axis] + movementMap[this.#movement];
+
+    this.verifyAttack();
     this.#movementCount++;
   }
 }

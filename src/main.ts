@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         mainMap,
         skull,
         mapForeground,
+        mobScreenDamage,
       } = gameAssets.images;
       const collisions = new Collisions(
         { height: mainMap.height, width: mainMap.width },
@@ -44,7 +45,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         frames: { max: 4 },
         sprites: { charLeft, charRight, charUp, charDown, char },
       });
-      const bug = new Mob(
+
+      const winBug = new Mob(
         {
           position: {
             x: mainMap.width / 2,
@@ -52,10 +54,11 @@ document.addEventListener('DOMContentLoaded', async () => {
           },
           velocity: 0,
           image: skull,
-          frames: { max: 4 },
-          sprites: { skull },
+          frames: { max: 6 },
+          sprites: { skull, mobScreenDamage },
         },
-        collisions
+        collisions,
+        character
       );
       const map = new MapSprite({
         position: { x: canvas.width / 2, y: canvas.height / 2 },
@@ -69,7 +72,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       canvas.addMap(map);
       canvas.addSprite(character);
-      canvas.addSprite(bug);
+      canvas.addSprite(winBug);
       canvas.addSprite(collisions);
       canvas.addSprite(foreground);
       canvas.centerCamera(map);
