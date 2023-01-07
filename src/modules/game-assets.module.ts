@@ -1,37 +1,34 @@
-export type ImageList<T = string> = {
-  [k in string]: T;
-};
-
-export class GameAssets {
+export class GameAssets<GameAssetsList = unknown> {
   #progress: number = 0;
   #itensLoaded = 0;
-  images: ImageList<HTMLImageElement> = {};
+  #images: { [k in string]: HTMLImageElement } = {};
   set progress(percent) {
     this.#progress = percent;
   }
   get progress() {
     return this.#progress;
   }
+  get images() {
+    return this.#images as GameAssetsList;
+  }
+
+  constructor(private onLoad?: () => void) {}
 
   private updateProgress(imageListLength: number) {
     this.progress = (100 / imageListLength) * this.#itensLoaded;
+    if (this.progress === 100) this.onLoad?.();
   }
 
-  async loadAssets(imageList: ImageList, onLoad?: () => void) {
-    Object.entries(imageList).forEach(([key, src]) => {
-      new Promise<HTMLImageElement>((resolve, reject) => {
-        const image = new Image();
-        image.addEventListener('load', () => resolve(image));
-        image.addEventListener('error', (err) => reject(err));
-        image.src = src;
-      }).then((image) => {
+  async loadAssets(imageList: { [k in string]: string }) {
+    const objectEntries = Object.entries(imageList);
+    objectEntries.forEach(([key, src]) => {
+      const image = new Image();
+      image.addEventListener('load', () => {
         this.#itensLoaded++;
-        this.images[key] = image;
-        this.updateProgress(Object.keys(imageList).length);
-
-        if (this.progress === 100) onLoad?.();
-        return image;
+        this.#images[key] = image;
+        this.updateProgress(objectEntries.length);
       });
+      image.src = src;
     });
   }
 }

@@ -1,7 +1,8 @@
 import { SpriteModel } from '../model/sprite.model';
+import { PlayerProps } from '../types/Sprites';
 import { CameraPosition, Canvas } from './canvas.module';
 import { Collisions } from './collisions.module';
-import { Player, PlayerProps } from './player.module';
+import { Player } from './player.module';
 
 export class Controls {
   movement = { left: false, right: false, up: false, down: false };
@@ -74,10 +75,7 @@ export class Controls {
     axis: 'x' | 'y',
     lastMovement: 'left' | 'right' | 'up' | 'down'
   ) {
-    this.char.image =
-      this.char.sprites[
-        `char${lastMovement[0].toUpperCase() + lastMovement.substring(1)}`
-      ];
+    this.char.image = this.char.sprites[lastMovement];
 
     if (
       this.colision?.verifyCollide(
@@ -186,7 +184,7 @@ export class Controls {
     document.addEventListener('keyup', (e) => {
       const parsedKey = this.getParsedKey(e.key, keysMap);
       this.movement[parsedKey as keyof typeof this.movement] = false;
-      this.char.image = this.char.sprites.char;
+      this.char.image = this.char.sprites.initial;
       this.lastMovement = null;
       this.isMoving = false;
     });

@@ -1,16 +1,18 @@
 import { SpriteModel } from '../model/sprite.model';
+import { MobSprites, PlayerProps } from '../types/Sprites';
 import { Collisions } from './collisions.module';
-import { Player, PlayerProps } from './player.module';
+import { Player } from './player.module';
 
-export class Mob extends Player implements SpriteModel {
+export class Mob extends Player<MobSprites> implements SpriteModel {
   #movement: 'left' | 'right' | 'up' | 'down' = 'left';
   #movementCount = 0;
   maxMovement = 3;
   attackRange = 140;
   damage = 10;
+  stirred = 0;
 
   constructor(
-    props: PlayerProps,
+    props: PlayerProps<MobSprites>,
     private collisions: Collisions,
     private char: Player
   ) {
@@ -23,9 +25,19 @@ export class Mob extends Player implements SpriteModel {
       this.position.x >= this.char.position.x - this.attackRange &&
       this.position.y <= this.char.position.y + this.attackRange &&
       this.position.y >= this.char.position.y - this.attackRange
-    )
-      this.image = this.sprites.mobScreenDamage;
-    else this.image = this.sprites.skull;
+    ) {
+      this.image = this.sprites.stirred;
+
+      if (this.stirred === 100) {
+        console.log('atacado');
+        this.stirred = 0;
+      }
+
+      this.stirred++;
+    } else {
+      this.image = this.sprites.initial;
+      this.stirred = 0;
+    }
   }
 
   draw(ctx: CanvasRenderingContext2D) {

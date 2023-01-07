@@ -1,20 +1,13 @@
 import { SpriteModel } from '../model/sprite.model';
+import { PlayerProps, PlayerSprites } from '../types/Sprites';
 
-export interface PlayerProps {
-  position: { x: number; y: number };
-  velocity: number;
-  image: HTMLImageElement;
-  frames: { max: number; val?: number; elapsed?: number };
-  sprites: { [k in string]: HTMLImageElement };
-}
-
-export class Player implements SpriteModel {
+export class Player<T = PlayerSprites> implements SpriteModel {
   position: { x: number; y: number };
   velocity: number;
   image: HTMLImageElement;
   frames: PlayerProps['frames'];
   moving = false;
-  sprites: { [k in string]: HTMLImageElement };
+  sprites: T;
   height: number;
   width: number;
 
@@ -24,7 +17,7 @@ export class Player implements SpriteModel {
     image,
     frames = { max: 1 },
     sprites,
-  }: PlayerProps) {
+  }: PlayerProps<T>) {
     this.position = position;
     this.velocity = velocity;
     this.image = image;

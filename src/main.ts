@@ -1,4 +1,4 @@
-import { assetsMap } from './assets';
+import { Assets, assetsMap } from './assets';
 import { Canvas } from './modules/canvas.module';
 import { Player } from './modules/player.module';
 import { Controls } from './modules/controls.module';
@@ -10,7 +10,7 @@ import { Collisions } from './modules/collisions.module';
 import { collisionsMap } from './collisions-map';
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const gameAssets = new GameAssets();
+  const gameAssets = new GameAssets<Assets>();
   const canvas = new Canvas();
   const loadScreen = new LoadScreen(
     () => {
@@ -25,9 +25,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         charRight,
         charUp,
         charDown,
-        char,
+        personagem,
         mainMap,
-        skull,
+        mob,
         mapForeground,
         mobScreenDamage,
       } = gameAssets.images;
@@ -41,21 +41,35 @@ document.addEventListener('DOMContentLoaded', async () => {
           y: mainMap.height / 2 - 50,
         },
         velocity: 0,
-        image: char,
+        image: personagem,
         frames: { max: 4 },
-        sprites: { charLeft, charRight, charUp, charDown, char },
+        sprites: {
+          initial: personagem,
+          left: charLeft,
+          right: charRight,
+          up: charUp,
+          down: charDown,
+          attack: personagem,
+          damage: personagem,
+        },
       });
 
-      const winBug = new Mob(
+      const bugMob = new Mob(
         {
           position: {
             x: mainMap.width / 2,
             y: mainMap.height / 2 - 100,
           },
           velocity: 0,
-          image: skull,
+          image: mob,
           frames: { max: 6 },
-          sprites: { skull, mobScreenDamage },
+          sprites: {
+            initial: mob,
+            stirred: mobScreenDamage,
+            attack: mob,
+            damage: mob,
+            killed: mob,
+          },
         },
         collisions,
         character
@@ -72,7 +86,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       canvas.addMap(map);
       canvas.addSprite(character);
-      canvas.addSprite(winBug);
+      canvas.addSprite(bugMob);
       canvas.addSprite(collisions);
       canvas.addSprite(foreground);
       canvas.centerCamera(map);
