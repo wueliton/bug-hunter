@@ -9,7 +9,7 @@ export interface PlayerProps<
   image: HTMLImageElement;
   frames: { max: number; val?: number; elapsed?: number };
   sprites: Sprites;
-  sounds?: Sounds;
+  sounds: Sounds;
 }
 
 export type PlayerSprites = {
@@ -32,10 +32,8 @@ export type MobSprites = {
     | 'killed']: HTMLImageElement;
 };
 
-export type PlayerSounds = {
-  [k in 'steps']?: HTMLAudioElement;
-};
+export type PlayerSounds = {};
 
 export type MobSounds = {
-  [k in 'steps']?: HTMLAudioElement;
+  [k in 'steps' | 'stirred' | 'killed']: HTMLAudioElement;
 };

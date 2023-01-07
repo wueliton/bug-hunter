@@ -1,5 +1,6 @@
 import { Collide, RectangularCollisionProps } from '../model/collide.model';
 import { SpriteModel } from '../model/sprite.model';
+import { getDistance } from '../utils/distance';
 import { Boundary } from './boundaries.module';
 
 export type CollisionsProps = {
@@ -30,7 +31,7 @@ export class Collisions implements SpriteModel, Collide {
   }) {
     return (
       rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&
-      rectangle1.position.x <= rectangle2.position.x + rectangle2.width - 30 &&
+      rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&
       rectangle1.position.y <= rectangle2.position.y + rectangle2.height - 30 &&
       rectangle1.position.y + rectangle1.height >= rectangle2.position.y
     );

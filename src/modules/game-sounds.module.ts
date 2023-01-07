@@ -10,6 +10,7 @@ export class GameSounds<SoundList = unknown> {
       const audio = document.createElement('audio');
       audio.src = sound;
       audio.preload = 'auto';
+      audio.volume = 0.02;
       this.#playlist[key] = audio;
     });
   }

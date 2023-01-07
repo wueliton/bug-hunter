@@ -11,6 +11,7 @@ export class Mob extends Player<MobSprites, MobSounds> implements SpriteModel {
   attackRange = 48 * 3;
   damage = 10;
   stirred = 0;
+  killed = false;
 
   constructor(
     props: PlayerProps<MobSprites, MobSounds>,
@@ -23,20 +24,28 @@ export class Mob extends Player<MobSprites, MobSounds> implements SpriteModel {
   verifyAttack(distance: number) {
     if (distance <= this.attackRange) {
       this.image = this.sprites.stirred;
+      if (this.stirred === 0) this.sounds?.stirred?.play();
 
-      if (this.stirred === 10) {
-        console.log('atacado');
+      if (this.stirred === 20) {
+        this.sounds.stirred.pause();
+        this.sounds.killed.volume = 0.005;
+        this.sounds.killed.play();
         this.stirred = 0;
+        this.killed = true;
       }
 
       this.stirred++;
     } else {
       this.image = this.sprites.initial;
       this.stirred = 0;
+      this.sounds.stirred.pause();
+      if (this.sounds?.stirred) this.sounds.stirred.currentTime = 0;
     }
   }
 
   draw(ctx: CanvasRenderingContext2D) {
+    if (this.killed) return;
+
     ctx.drawImage(
       this.image,
       (this.frames.val || 0) * this.width,

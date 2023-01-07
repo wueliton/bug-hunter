@@ -12,7 +12,7 @@ export class Player<T = PlayerSprites, S = PlayerSounds>
   sprites: T;
   height: number;
   width: number;
-  sounds?: S;
+  sounds: S;
 
   constructor({
     position,

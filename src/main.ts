@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           attack: personagem,
           damage: personagem,
         },
+        sounds: {},
       });
 
       const bugMob = new Mob(
@@ -76,7 +77,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             damage: mob,
             killed: mob,
           },
-          sounds: { steps: gameSounds.playlist.mobSteps },
+          sounds: {
+            steps: gameSounds.playlist.mobSteps,
+            stirred: gameSounds.playlist.stirred,
+            killed: gameSounds.playlist.error,
+          },
         },
         collisions,
         character
