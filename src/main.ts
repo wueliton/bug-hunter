@@ -8,9 +8,12 @@ import { LoadScreen } from './screens/load.screen';
 import { Mob } from './modules/mob.module';
 import { Collisions } from './modules/collisions.module';
 import { collisionsMap } from './collisions-map';
+import { GameSounds } from './modules/game-sounds.module';
+import { playlist, Playlist } from './playlist';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const gameAssets = new GameAssets<Assets>();
+  const gameSounds = new GameSounds<Playlist>(playlist);
   const canvas = new Canvas();
   const loadScreen = new LoadScreen(
     () => {
@@ -19,6 +22,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       }, 1000);
     },
     () => {
+      gameSounds.playlist.theme2.volume = 0.05;
+      gameSounds.playlist.theme2.loop = true;
+      gameSounds.playlist.theme2.play();
       canvas.clearSprites();
       const {
         charLeft,
@@ -70,6 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             damage: mob,
             killed: mob,
           },
+          sounds: { steps: gameSounds.playlist.mobSteps },
         },
         collisions,
         character

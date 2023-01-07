@@ -1,7 +1,9 @@
 import { SpriteModel } from '../model/sprite.model';
-import { PlayerProps, PlayerSprites } from '../types/Sprites';
+import { PlayerProps, PlayerSounds, PlayerSprites } from '../types/Sprites';
 
-export class Player<T = PlayerSprites> implements SpriteModel {
+export class Player<T = PlayerSprites, S = PlayerSounds>
+  implements SpriteModel
+{
   position: { x: number; y: number };
   velocity: number;
   image: HTMLImageElement;
@@ -10,6 +12,7 @@ export class Player<T = PlayerSprites> implements SpriteModel {
   sprites: T;
   height: number;
   width: number;
+  sounds?: S;
 
   constructor({
     position,
@@ -17,7 +20,8 @@ export class Player<T = PlayerSprites> implements SpriteModel {
     image,
     frames = { max: 1 },
     sprites,
-  }: PlayerProps<T>) {
+    sounds,
+  }: PlayerProps<T, S>) {
     this.position = position;
     this.velocity = velocity;
     this.image = image;
@@ -25,6 +29,7 @@ export class Player<T = PlayerSprites> implements SpriteModel {
     this.sprites = sprites;
     this.height = image.height;
     this.width = image.width / this.frames.max;
+    this.sounds = sounds;
   }
 
   draw(ctx: CanvasRenderingContext2D) {

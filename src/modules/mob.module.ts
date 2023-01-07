@@ -1,34 +1,30 @@
 import { SpriteModel } from '../model/sprite.model';
-import { MobSprites, PlayerProps } from '../types/Sprites';
+import { MobSounds, MobSprites, PlayerProps } from '../types/Sprites';
+import { getDistance } from '../utils/distance';
 import { Collisions } from './collisions.module';
 import { Player } from './player.module';
 
-export class Mob extends Player<MobSprites> implements SpriteModel {
+export class Mob extends Player<MobSprites, MobSounds> implements SpriteModel {
   #movement: 'left' | 'right' | 'up' | 'down' = 'left';
   #movementCount = 0;
   maxMovement = 3;
-  attackRange = 140;
+  attackRange = 48 * 3;
   damage = 10;
   stirred = 0;
 
   constructor(
-    props: PlayerProps<MobSprites>,
+    props: PlayerProps<MobSprites, MobSounds>,
     private collisions: Collisions,
     private char: Player
   ) {
     super(props);
   }
 
-  verifyAttack() {
-    if (
-      this.position.x <= this.char.position.x + this.attackRange &&
-      this.position.x >= this.char.position.x - this.attackRange &&
-      this.position.y <= this.char.position.y + this.attackRange &&
-      this.position.y >= this.char.position.y - this.attackRange
-    ) {
+  verifyAttack(distance: number) {
+    if (distance <= this.attackRange) {
       this.image = this.sprites.stirred;
 
-      if (this.stirred === 100) {
+      if (this.stirred === 10) {
         console.log('atacado');
         this.stirred = 0;
       }
@@ -63,6 +59,21 @@ export class Mob extends Player<MobSprites> implements SpriteModel {
       )
         this.frames.val++;
       else this.frames.val = 0;
+
+      const distance = getDistance(this.position, this.char.position);
+
+      if (this.sounds?.steps) {
+        if (this.frames.val === 4) {
+          const soundDistance = (1 - distance / (48 * 20)) * 0.2;
+          this.sounds.steps.volume = soundDistance > 0 ? soundDistance : 0;
+          this.sounds?.steps?.play?.();
+          this.sounds.steps.onended = () =>
+            (this.sounds!.steps!.currentTime = 0);
+        }
+      }
+
+      this.verifyAttack(distance);
+      this.frames.elapsed = 0;
     }
 
     const movementMap = {
@@ -101,7 +112,6 @@ export class Mob extends Player<MobSprites> implements SpriteModel {
     )
       this.position[axis] = this.position[axis] + movementMap[this.#movement];
 
-    this.verifyAttack();
     this.#movementCount++;
   }
 }

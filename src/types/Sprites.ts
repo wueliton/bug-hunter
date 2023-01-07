@@ -1,9 +1,15 @@
-export interface PlayerProps<Sprites = { [k in string]: HTMLImageElement }> {
-  position: { x: number; y: number };
+export type MapPosition = { x: number; y: number };
+
+export interface PlayerProps<
+  Sprites = { [k in string]: HTMLImageElement },
+  Sounds = { [k in string]: HTMLAudioElement }
+> {
+  position: MapPosition;
   velocity: number;
   image: HTMLImageElement;
   frames: { max: number; val?: number; elapsed?: number };
   sprites: Sprites;
+  sounds?: Sounds;
 }
 
 export type PlayerSprites = {
@@ -24,4 +30,12 @@ export type MobSprites = {
     | 'attack'
     | 'damage'
     | 'killed']: HTMLImageElement;
+};
+
+export type PlayerSounds = {
+  [k in 'steps']?: HTMLAudioElement;
+};
+
+export type MobSounds = {
+  [k in 'steps']?: HTMLAudioElement;
 };
