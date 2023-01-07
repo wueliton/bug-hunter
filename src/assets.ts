@@ -8,6 +8,7 @@ export const assetsMap = {
   mapForeground: './src/assets/images/map_foreground.png',
   mobScreenDamage: './src/assets/images/bugScreenDamage.png',
   mob: './src/assets/images/bugScreen.png',
+  mobExplosion: './src/assets/images/bugExplosion.png',
 };
 
 export type Assets = { [k in keyof typeof assetsMap]: HTMLImageElement };

@@ -12,6 +12,7 @@ export class Mob extends Player<MobSprites, MobSounds> implements SpriteModel {
   damage = 10;
   stirred = 0;
   killed = false;
+  deleted = false;
 
   constructor(
     props: PlayerProps<MobSprites, MobSounds>,
@@ -22,6 +23,8 @@ export class Mob extends Player<MobSprites, MobSounds> implements SpriteModel {
   }
 
   verifyAttack(distance: number) {
+    if (this.killed) return;
+
     if (distance <= this.attackRange) {
       this.image = this.sprites.stirred;
       if (this.stirred === 0) this.sounds?.stirred?.play();
@@ -32,6 +35,8 @@ export class Mob extends Player<MobSprites, MobSounds> implements SpriteModel {
         this.sounds.killed.play();
         this.stirred = 0;
         this.killed = true;
+        this.image = this.sprites.killed;
+        this.frames.val = 0;
       }
 
       this.stirred++;
@@ -44,8 +49,7 @@ export class Mob extends Player<MobSprites, MobSounds> implements SpriteModel {
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    if (this.killed) return;
-
+    if (this.deleted) return;
     ctx.drawImage(
       this.image,
       (this.frames.val || 0) * this.width,
@@ -71,7 +75,7 @@ export class Mob extends Player<MobSprites, MobSounds> implements SpriteModel {
 
       const distance = getDistance(this.position, this.char.position);
 
-      if (this.sounds?.steps) {
+      if (this.sounds?.steps && !this.killed) {
         if (this.frames.val === 4) {
           const soundDistance = (1 - distance / (48 * 20)) * 0.2;
           this.sounds.steps.volume = soundDistance > 0 ? soundDistance : 0;
@@ -80,6 +84,8 @@ export class Mob extends Player<MobSprites, MobSounds> implements SpriteModel {
             (this.sounds!.steps!.currentTime = 0);
         }
       }
+
+      if (this.killed && this.frames.val === 0) this.deleted = true;
 
       this.verifyAttack(distance);
       this.frames.elapsed = 0;

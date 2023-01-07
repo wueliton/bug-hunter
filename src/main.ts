@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         mob,
         mapForeground,
         mobScreenDamage,
+        mobExplosion,
       } = gameAssets.images;
       const collisions = new Collisions(
         { height: mainMap.height, width: mainMap.width },
@@ -65,7 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         {
           position: {
             x: mainMap.width / 2,
-            y: mainMap.height / 2 - 100,
+            y: mainMap.height / 2 - 48 * 7,
           },
           velocity: 0,
           image: mob,
@@ -75,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             stirred: mobScreenDamage,
             attack: mob,
             damage: mob,
-            killed: mob,
+            killed: mobExplosion,
           },
           sounds: {
             steps: gameSounds.playlist.mobSteps,
