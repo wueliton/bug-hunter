@@ -1,6 +1,5 @@
 import { Collide, RectangularCollisionProps } from '../model/collide.model';
 import { SpriteModel } from '../model/sprite.model';
-import { getDistance } from '../utils/distance';
 import { Boundary } from './boundaries.module';
 
 export type CollisionsProps = {
